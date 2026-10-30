@@ -34,6 +34,7 @@ patricia-wisnevski/
 ├── publicar/              <- GERADA. O pacote estático do Netlify.
 ├── .armazem-local/        <- GERADA. O conteúdo ao testar na sua máquina.
 ├── publicar.js            <- monta publicar/ a partir de site/
+├── gerar-bairros.js      <- refaz site/js/bairros.js a partir do JSON
 ├── servidor-funcoes.mjs   <- testa as funções aqui. Não sobe.
 ├── package.json           <- só para as funções. O site segue sem build.
 ├── netlify.toml           <- cabeçalhos, cache e o comando de build
@@ -122,11 +123,20 @@ Uma página só, com três blocos e um botão de salvar que fica fixo embaixo:
   todas as dele vão junto.
 
   **A barra de filtro se monta sozinha a partir daqui.** Os tipos vêm das
-  etiquetas, os bairros vêm do campo bairro, e a faixa de preço lê o valor. Item
-  sem bairro não some do site: ele só não entra na lista de bairros, e o campo
-  inteiro desaparece da barra enquanto nenhum imóvel tiver bairro. Um item sem
-  preço nunca é escondido por um filtro de preço, porque esconder por um dado
-  que não existe seria mentir para quem procura.
+  etiquetas e a faixa de preço lê o valor. Um item sem preço nunca é escondido
+  por um filtro de preço, porque esconder por um dado que não existe seria
+  mentir para quem procura.
+
+  **Os bairros são os 94 de Porto Alegre, sempre todos.** Os que têm imóvel no
+  momento aparecem num grupo em cima, separados do resto: numa lista de 94,
+  achar os poucos que levam a algum lugar não pode dar trabalho. Escolher um
+  bairro vazio mostra o convite para chamar no WhatsApp, que é a resposta
+  honesta.
+
+  No painel, o campo de bairro oferece a mesma lista enquanto ela digita. É
+  oferta, não imposição: dá para digitar um bairro de fora, para imóvel em
+  cidade vizinha. O que isso evita é escrever "Moinhos" num e "Moinhos de
+  Vento" noutro, e o filtro separar os dois sem ninguém entender.
 - **Sobre.** A foto dela, a frase de destaque e o texto de apresentação.
 - **Contato.** WhatsApp, Instagram, e-mail, CRECI e cidade, mais **a mensagem
   que já vem escrita** quando alguém clica em Falar com a Patricia.
@@ -377,6 +387,7 @@ Chrome de verdade, headless, com toque emulado.
 | Galeria no painel | envia várias, reordena, troca a capa, remove e apaga o arquivo |
 | Visor no site | abre, navega com seta e teclado, dá a volta, fecha no Esc |
 | Envio de foto grande | 4032px e 1,4 MB viram 1920px e 287 KB, uma por requisição |
+| Filtro de bairros | 94 opções, agrupadas; filtra, conta e avisa quando não há nada |
 | Site depois de salvar | muda na hora: `/api/dados` responde `no-store` |
 | Foco no visor | fica preso dentro e volta ao card ao fechar |
 | O site sem o painel | vídeo, filtro, cards e foto funcionam igual; só a portinha some |

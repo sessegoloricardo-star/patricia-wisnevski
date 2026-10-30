@@ -166,6 +166,14 @@ function limpar_falhas(): void
 /* ---------------------------------------------------------------
    Conteúdo
 ---------------------------------------------------------------- */
+/* A lista de bairros, a mesma que o site e o painel do Netlify usam.
+   Fonte única em conteudo/bairros.json. */
+function bairros_poa(): array
+{
+    $b = @json_decode((string) @file_get_contents(PASTA . '/bairros.json'), true);
+    return is_array($b) ? $b : [];
+}
+
 function carregar(): array
 {
     $d = @json_decode((string) @file_get_contents(ARQ_DADOS), true);

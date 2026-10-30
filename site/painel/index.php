@@ -270,6 +270,9 @@ function tela_instalar(array $avisos): void
       então anote num lugar seguro.</p>
       <?php avisos_html($avisos); ?>
       <form method="post">
+    <datalist id="bairros-poa">
+      <?php foreach (bairros_poa() as $b): ?><option value="<?= h($b) ?>"><?php endforeach; ?>
+    </datalist>
         <input type="hidden" name="csrf" value="<?= h(token()) ?>">
         <div class="gestor__campo">
           <label for="s1">Senha, mínimo 8 caracteres</label>
@@ -366,7 +369,7 @@ function tela_painel(array $d, array $avisos, string $sucesso, array $semEscrita
               <div class="pg__tripla">
                 <div class="gestor__campo">
                   <label for="ba<?= $i ?>">Bairro</label>
-                  <input id="ba<?= $i ?>" name="op[<?= $i ?>][bairro]" value="<?= h($o['bairro'] ?? '') ?>" maxlength="80">
+                  <input id="ba<?= $i ?>" name="op[<?= $i ?>][bairro]" value="<?= h($o['bairro'] ?? '') ?>" maxlength="80" list="bairros-poa" placeholder="Comece a digitar">
                 </div>
                 <div class="gestor__campo">
                   <label for="pr<?= $i ?>">Preço</label>

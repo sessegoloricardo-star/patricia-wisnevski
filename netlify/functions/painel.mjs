@@ -12,6 +12,13 @@ import {
 } from "../lib/nucleo.mjs";
 import { gravarBin, apagar } from "../lib/armazem.mjs";
 
+/* A mesma lista que o filtro do site usa. Oferecida, não imposta:
+   é um datalist, então ela ainda pode digitar um bairro de fora,
+   para imóvel em cidade vizinha. O que não pode é escrever
+   "Moinhos" num e "Moinhos de Vento" noutro, e o filtro separar
+   os dois sem ninguém entender. */
+import bairrosPOA from "../../site/conteudo/bairros.json" with { type: "json" };
+
 export const config = { path: ["/painel", "/painel/", "/painel/sair"] };
 
 const LIM = { titulo: 120, texto: 400, tag: 40, bairro: 80, preco: 40, specs: 120,
@@ -182,7 +189,9 @@ function telaPainel(d, tk, recados, erros) {
     </div>
     <div class="pg__tripla">
       ${campo(`g${i}`, "Etiqueta", o.tag, `name="op[${i}][tag]" maxlength="${LIM.tag}"`)}
-      ${campo(`b${i}`, "Bairro", o.bairro, `name="op[${i}][bairro]" maxlength="${LIM.bairro}"`)}
+      ${campo(`b${i}`, "Bairro", o.bairro,
+        `name="op[${i}][bairro]" maxlength="${LIM.bairro}" list="bairros-poa"
+         placeholder="Comece a digitar"`)}
       ${campo(`p${i}`, "Preço", o.preco, `name="op[${i}][preco]" maxlength="${LIM.preco}"`)}
     </div>
     ${campo(`e${i}`, "Características, separadas por vírgula",
@@ -197,6 +206,9 @@ function telaPainel(d, tk, recados, erros) {
   return pagina("Painel", `
 ${avisos(erros)}
 ${avisos(recados, "ok")}
+<datalist id="bairros-poa">
+  ${bairrosPOA.map((b) => `<option value="${h(b)}">`).join("\n  ")}
+</datalist>
 <form method="post" enctype="multipart/form-data">
   <input type="hidden" name="csrf" value="${h(tk)}">
 

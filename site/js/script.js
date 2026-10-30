@@ -189,13 +189,28 @@
     var antesT = selTipo.value, antesB = selBairro.value;
     selTipo.innerHTML = '<option value="">Todos os tipos</option>' +
       tipos.map(function (t) { return '<option value="' + esc(t) + '">' + esc(t) + "</option>"; }).join("");
+
+    /* Os 94 bairros de Porto Alegre, sempre todos. Os que têm
+       imóvel agora vêm em cima, separados: numa lista de 94, achar
+       os poucos que levam a algum lugar não pode dar trabalho. */
+    var todos = (typeof BAIRROS !== "undefined" && BAIRROS.length) ? BAIRROS : bairros;
+    var opcao = function (b) { return '<option value="' + esc(b) + '">' + esc(b) + "</option>"; };
+    var restantes = todos.filter(function (b) { return bairros.indexOf(b) < 0; });
+    var foraDaLista = bairros.filter(function (b) { return todos.indexOf(b) < 0; });
+
     selBairro.innerHTML = '<option value="">Todos os bairros</option>' +
-      bairros.map(function (b) { return '<option value="' + esc(b) + '">' + esc(b) + "</option>"; }).join("");
+      (bairros.length
+        ? '<optgroup label="Com imóvel agora">' +
+            bairros.concat(foraDaLista).filter(function (b, i, a) { return a.indexOf(b) === i; })
+              .sort().map(opcao).join("") + "</optgroup>"
+        : "") +
+      '<optgroup label="Todos os bairros de Porto Alegre">' +
+        restantes.map(opcao).join("") + "</optgroup>";
     selTipo.value = antesT; selBairro.value = antesB;
 
-    /* sem nenhum bairro cadastrado, o campo não tem o que fazer */
-    selBairro.closest(".busca__campo").hidden = bairros.length === 0;
-    form.querySelector(".busca__campos").classList.toggle("sem-bairro", bairros.length === 0);
+    /* O campo agora sempre tem o que oferecer */
+    selBairro.closest(".busca__campo").hidden = false;
+    form.querySelector(".busca__campos").classList.remove("sem-bairro");
 
     if (!buscaArmada) {
       buscaArmada = true;
