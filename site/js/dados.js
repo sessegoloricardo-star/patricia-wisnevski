@@ -1,13 +1,13 @@
 /* =============================================================
    DADOS DO SITE, Patricia Wisnevski
-   Gerado pelo painel em 30/10/2026 12:33.
+   Gerado pelo painel em 30/10/2026 14:27.
    Não edite à mão: a próxima gravação do painel sobrescreve.
    ============================================================= */
 
 const DADOS = {
   contato: {
-      "whatsapp": "",
-      "mensagemPadrao": "Olá, Patricia! Vim pelo seu site e gostaria de conversar.",
+      "whatsapp": "555197125442",
+      "mensagemPadrao": "Olá, Patricia! Vim pelo seu site e gostaria de mais informações sobre os imóveis disponíveis.",
       "instagram": "https://www.instagram.com/pwisnevski/",
       "email": "",
       "cidade": "Porto Alegre, RS",
