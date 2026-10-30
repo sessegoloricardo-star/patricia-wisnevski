@@ -82,6 +82,7 @@ hospedagem com PHP, é `site/painel/`. No Netlify, são as funções de
 |---|---|---|
 | Conteúdo | `conteudo/dados.json` | Netlify Blobs |
 | Fotos por imóvel | **uma** | **até 12** |
+| Envio das fotos | o formulário leva | reduzidas no navegador, uma requisição cada |
 | Fotos enviadas | `assets/imoveis/` | Netlify Blobs, servidas por `/api/foto/` |
 | Senha | `conteudo/config.php` | Netlify Blobs |
 | Sessão | sessão do PHP | cookie assinado |
@@ -112,7 +113,9 @@ Uma página só, com três blocos e um botão de salvar que fica fixo embaixo:
   adicionar.
 
   **Cada imóvel aceita até 12 fotos.** No painel do Netlify, o campo de envio
-  aceita várias de uma vez. A primeira da lista é a **capa**, que aparece no
+  aceita várias de uma vez, e pode ser a original do celular: o navegador
+  reduz para 1920px antes de subir, uma de cada vez. Uma foto de 4032px e
+  1,4 MB chega lá com 1920px e 287 KB. A primeira da lista é a **capa**, que aparece no
   card; as outras só aparecem quando alguém abre o visor. Para trocar a capa,
   mude o número de ordem. Cada foto tem a sua descrição, para quem navega sem
   enxergar. Removida a foto, o arquivo dela é apagado junto; removido o imóvel,
@@ -373,6 +376,8 @@ Chrome de verdade, headless, com toque emulado.
 | Site lendo o painel | card, bairro, preço e botão de WhatsApp mudam sem republicar |
 | Galeria no painel | envia várias, reordena, troca a capa, remove e apaga o arquivo |
 | Visor no site | abre, navega com seta e teclado, dá a volta, fecha no Esc |
+| Envio de foto grande | 4032px e 1,4 MB viram 1920px e 287 KB, uma por requisição |
+| Site depois de salvar | muda na hora: `/api/dados` responde `no-store` |
 | Foco no visor | fica preso dentro e volta ao card ao fechar |
 | O site sem o painel | vídeo, filtro, cards e foto funcionam igual; só a portinha some |
 | Pacote sem painel | nenhum pedido a `/api` ou `/painel`: nada de backend |

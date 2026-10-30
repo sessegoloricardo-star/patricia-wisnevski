@@ -30,9 +30,11 @@ export default async (req) => {
   return new Response(JSON.stringify(d), {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      /* meio minuto de folga: a corretora vê a mudança logo,
-         e uma visita em massa não vira uma invocação por pessoa */
-      "Cache-Control": "public, max-age=30, stale-while-revalidate=300",
+      /* Sem cache. Já tentei guardar por 30 segundos para poupar
+         invocação, e isso quebra a única promessa que o painel faz:
+         salvou, o site mudou. Com stale-while-revalidate a resposta
+         velha ainda podia ficar de pé por cinco minutos. */
+      "Cache-Control": "no-store",
     },
   });
 };

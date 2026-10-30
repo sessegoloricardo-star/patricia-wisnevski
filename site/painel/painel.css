@@ -156,3 +156,15 @@
   .pg__fotos{ grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px }
   .pg__galeria{ padding:12px }
 }
+
+/* Recado do envio de fotos */
+.pg__envio{
+  margin:10px 0 0; font-size:13.5px; line-height:1.45;
+  min-height:1.2em;
+}
+.pg__envio[data-estado="indo"]{ color:var(--ink-2) }
+.pg__envio[data-estado="ok"]{ color:var(--accent) }
+.pg__envio[data-estado="erro"]{ color:#9B2C1F }
+.pg__dica-envio{
+  margin:8px 0 0; font-size:12.5px; color:var(--ink-3); line-height:1.45;
+}

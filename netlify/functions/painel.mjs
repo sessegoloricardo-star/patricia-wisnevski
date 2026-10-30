@@ -36,6 +36,7 @@ ${cabecalho || ""}
 <main class="pg__corpo">
 ${corpo}
 </main>
+<script src="/js/painel.js" defer></script>
 </body>
 </html>`;
 }
@@ -162,7 +163,9 @@ function telaPainel(d, tk, recados, erros) {
       ? `<p class="pg__sem-foto">Chegou no limite de ${MAX_FOTOS} fotos. Remova alguma para enviar outra.</p>`
       : `<label class="pg__arquivo"><span>Adicionar fotos, pode escolher várias</span>
            <input type="file" name="novas[${i}]" multiple
-                  accept="image/jpeg,image/png,image/webp"></label>`}
+                  accept="image/jpeg,image/png,image/webp"></label>
+         <p class="pg__dica-envio">As fotos são reduzidas aqui mesmo antes de subir,
+           então pode mandar as originais do celular.</p>`}
   </div>`;
   };
 

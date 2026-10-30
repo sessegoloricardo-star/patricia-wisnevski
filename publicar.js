@@ -53,12 +53,13 @@ copiar(ORIGEM, DESTINO, ORIGEM);
 /* A pasta painel/ fica de fora, mas a folha de estilo dela é servida
    ao navegador quando a corretora abre o painel. Então ela vai junto,
    e só quando o painel for junto: sem painel é peso morto. */
-var folha = caminho.join(ORIGEM, "painel", "painel.css");
-if (PAINEL === "/painel/" && fs.existsSync(folha)) {
-  fs.copyFileSync(folha, caminho.join(DESTINO, "css", "painel.css"));
-  copiados.push("css/painel.css");
-  bytes += fs.statSync(folha).size;
-}
+[["painel.css", "css"], ["painel.js", "js"]].forEach(function (par) {
+  var de = caminho.join(ORIGEM, "painel", par[0]);
+  if (PAINEL !== "/painel/" || !fs.existsSync(de)) return;
+  fs.copyFileSync(de, caminho.join(DESTINO, par[1], par[0]));
+  copiados.push(par[1] + "/" + par[0]);
+  bytes += fs.statSync(de).size;
+});
 
 /* A porta do gestor: some, ou aponta para onde o painel realmente está. */
 var alvo = caminho.join(DESTINO, "index.html");
