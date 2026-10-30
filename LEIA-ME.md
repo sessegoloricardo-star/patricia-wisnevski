@@ -79,6 +79,7 @@ hospedagem com PHP, é `site/painel/`. No Netlify, são as funções de
 | | Com PHP | No Netlify |
 |---|---|---|
 | Conteúdo | `conteudo/dados.json` | Netlify Blobs |
+| Fotos por imóvel | **uma** | **até 12** |
 | Fotos enviadas | `assets/imoveis/` | Netlify Blobs, servidas por `/api/foto/` |
 | Senha | `conteudo/config.php` | Netlify Blobs |
 | Sessão | sessão do PHP | cookie assinado |
@@ -102,11 +103,18 @@ gerenciador de arquivos da hospedagem. O painel volta a pedir uma senha nova.
 
 Uma página só, com três blocos e um botão de salvar que fica fixo embaixo:
 
-- **Imóveis e opções.** Cada item vira um card. Trocar a foto, o título, a
+- **Imóveis e opções.** Cada item vira um card. Trocar as fotos, o título, a
   descrição, e reordenar pelo número de ordem. Preenchendo **bairro, preço e
   características**, o card deixa de ser categoria e vira anúncio, com as
   etiquetas de metragem e o valor. Tem caixinha para remover e botão para
   adicionar.
+
+  **Cada imóvel aceita até 12 fotos.** No painel do Netlify, o campo de envio
+  aceita várias de uma vez. A primeira da lista é a **capa**, que aparece no
+  card; as outras só aparecem quando alguém abre o visor. Para trocar a capa,
+  mude o número de ordem. Cada foto tem a sua descrição, para quem navega sem
+  enxergar. Removida a foto, o arquivo dela é apagado junto; removido o imóvel,
+  todas as dele vão junto.
 
   **A barra de filtro se monta sozinha a partir daqui.** Os tipos vêm das
   etiquetas, os bairros vêm do campo bairro, e a faixa de preço lê o valor. Item
@@ -361,6 +369,9 @@ Chrome de verdade, headless, com toque emulado.
 | Trava de 5 erros | fecha e recusa 401 até a senha certa, por 15 minutos |
 | CSRF inválido | recusado com 400 |
 | Site lendo o painel | card, bairro, preço e botão de WhatsApp mudam sem republicar |
+| Galeria no painel | envia várias, reordena, troca a capa, remove e apaga o arquivo |
+| Visor no site | abre, navega com seta e teclado, dá a volta, fecha no Esc |
+| Foco no visor | fica preso dentro e volta ao card ao fechar |
 | O site sem o painel | vídeo, filtro, cards e foto funcionam igual; só a portinha some |
 | Pacote sem painel | nenhum pedido a `/api` ou `/painel`: nada de backend |
 | O zip | descompacta com `index.html` na raiz, 15 arquivos idênticos à pasta |
@@ -373,10 +384,40 @@ Chrome de verdade, headless, com toque emulado.
 
 ---
 
-## 7. O que ainda não existe
+## 7. O que falta para o site estar pronto
 
-- **Depoimentos.** Ficaram de fora: depoimento inventado derruba a credibilidade
-  de um site que vende confiança. Entram quando houver reais, autorizados.
+Em ordem de importância.
+
+### Trava o lançamento
+
+- **O WhatsApp da Patricia.** É o único campo vazio que muda o comportamento do
+  site: sem ele, todos os nove botões vão para o Instagram em vez de abrir
+  conversa. Cadastre pelo painel, aba Contato.
+- **O domínio.** Em `site/index.html`, procure `<!-- DEPLOY STEP -->` e troque
+  as três URLs. Enquanto não for trocado, o que o Google e o WhatsApp leem ao
+  compartilhar o link aponta para um endereço que não existe.
+
+### Não trava, mas pesa
+
+- **Imóveis de verdade.** Os quatro cards de hoje são categorias, sem bairro e
+  sem preço. A barra de filtro já funciona, mas só mostra o que tem para
+  mostrar: enquanto forem categorias, ela filtra pouca coisa.
+- **Fotos reais dos imóveis.** As de hoje são ilustrativas e geradas por
+  inteligência artificial, e o rodapé diz isso. Honesto, mas não vende.
+
+### Decisões que ainda são suas
+
+- **Onde o painel vai morar.** Com painel, a publicação tem que ser por Git.
+  Sem painel, dá para arrastar a pasta. A seção 5 compara.
+- **Os dois painéis.** Existem duas versões, PHP e Netlify, e elas já não são
+  iguais: só a do Netlify aceita várias fotos por imóvel. Salvar pelo painel PHP
+  não apaga as fotos extras, mas também não permite mexer nelas. Escolhida a
+  hospedagem, a outra versão deveria sair do projeto.
+
+### Fica de fora de propósito
+
+- **Depoimentos.** Depoimento inventado derruba a credibilidade de um site que
+  vende confiança. Entram quando houver reais, autorizados.
 - **Blog e sitemap.xml.** O `robots.txt` aponta para um sitemap que ainda não
   existe.
 

@@ -8,7 +8,7 @@
 import {
   h, limpo, carregar, gravar, instalado, gravarSenha, entrar,
   lerSessao, cookieSessao, token, tokenOk, bloqueadoPor,
-  MAX_BYTES, tipoDaImagem, nomeDeFoto,
+  MAX_BYTES, MAX_FOTOS, tipoDaImagem, nomeDeFoto,
 } from "./_nucleo.mjs";
 import { gravarBin, apagar } from "./_armazem.mjs";
 
@@ -110,6 +110,15 @@ function telaEntrar(erros) {
 /* ---------------------------------------------------------------
    O painel
 ---------------------------------------------------------------- */
+/* As fotos do pacote vêm com caminho relativo ("assets/..."), que o
+   navegador resolveria a partir de /painel/ e daria 404. As enviadas
+   pelo painel já vêm absolutas. Aqui as duas viram absolutas. */
+function url(src) {
+  const s = String(src || "");
+  if (!s) return "";
+  return /^(https?:)?\/\//.test(s) || s.startsWith("/") ? s : "/" + s;
+}
+
 function campo(id, rotulo, valor, atributos) {
   return `<div class="gestor__campo">
   <label for="${id}">${h(rotulo)}</label>
@@ -118,14 +127,47 @@ function campo(id, rotulo, valor, atributos) {
 }
 
 function telaPainel(d, tk, recados, erros) {
+  const galeria = (o, i) => {
+    const fotos = o.fotos || [];
+    const cartoes = fotos.map((f, j) => `
+    <li class="pg__foto">
+      <img src="${h(url(f.src))}" alt="" loading="lazy">
+      ${j === 0 ? '<span class="pg__capa">Capa</span>' : ""}
+      <input type="hidden" name="op[${i}][fotos][${j}][src]" value="${h(f.src)}">
+      <label class="pg__foto-ordem">
+        <span>Ordem</span>
+        <input name="op[${i}][fotos][${j}][ordem]" type="number" min="1" max="${MAX_FOTOS}"
+               value="${j + 1}" aria-label="Ordem da foto ${j + 1}">
+      </label>
+      <label class="pg__foto-alt">
+        <span>Descrição</span>
+        <input name="op[${i}][fotos][${j}][alt]" value="${h(f.alt || "")}" maxlength="${LIM.alt}"
+               placeholder="O que aparece na foto" aria-label="Descrição da foto ${j + 1}">
+      </label>
+      <label class="pg__foto-fora">
+        <input type="checkbox" name="op[${i}][fotos][${j}][remover]" value="1"> Remover
+      </label>
+    </li>`).join("");
+
+    const cheio = fotos.length >= MAX_FOTOS;
+    return `
+  <div class="pg__galeria">
+    <p class="pg__galeria-topo">
+      <strong>Fotos deste imóvel</strong>
+      <span>${fotos.length} de ${MAX_FOTOS}. A primeira é a capa, que aparece no card.</span>
+    </p>
+    ${cartoes ? `<ul class="pg__fotos">${cartoes}</ul>`
+              : '<p class="pg__sem-foto">Nenhuma foto ainda.</p>'}
+    ${cheio
+      ? `<p class="pg__sem-foto">Chegou no limite de ${MAX_FOTOS} fotos. Remova alguma para enviar outra.</p>`
+      : `<label class="pg__arquivo"><span>Adicionar fotos, pode escolher várias</span>
+           <input type="file" name="novas[${i}]" multiple
+                  accept="image/jpeg,image/png,image/webp"></label>`}
+  </div>`;
+  };
+
   const itens = d.opcoes.map((o, i) => `
-<div class="pg__item">
-  <div class="pg__item-foto">
-    <img src="${h(o.imagem || "")}" alt="" loading="lazy">
-    <label class="pg__arquivo"><span>Trocar a foto</span>
-      <input type="file" name="foto[${i}]" accept="image/jpeg,image/png,image/webp"></label>
-    <input type="hidden" name="op[${i}][imagem]" value="${h(o.imagem || "")}">
-  </div>
+<div class="pg__item pg__item--largo">
   <div class="pg__item-campos">
     <div class="pg__dupla">
       ${campo(`t${i}`, "Título", o.titulo, `name="op[${i}][titulo]" maxlength="${LIM.titulo}"`)}
@@ -142,10 +184,9 @@ function telaPainel(d, tk, recados, erros) {
     </div>
     ${campo(`e${i}`, "Características, separadas por vírgula",
       (o.specs || []).join(", "), `name="op[${i}][specs]" maxlength="${LIM.specs}"`)}
-    ${campo(`a${i}`, "Descrição da foto, para quem não enxerga",
-      o.alt, `name="op[${i}][alt]" maxlength="${LIM.alt}"`)}
+    ${galeria(o, i)}
     <label class="pg__remover">
-      <input type="checkbox" name="op[${i}][remover]" value="1"> Remover este item ao salvar
+      <input type="checkbox" name="op[${i}][remover]" value="1"> Remover este imóvel ao salvar
     </label>
   </div>
 </div>`).join("\n");
@@ -167,7 +208,7 @@ ${avisos(recados, "ok")}
     <h2>Sobre</h2>
     <div class="pg__item">
       <div class="pg__item-foto">
-        <img src="${h(d.sobre.foto || "")}" alt="" loading="lazy">
+        <img src="${h(url(d.sobre.foto))}" alt="" loading="lazy">
         <label class="pg__arquivo"><span>Trocar a foto</span>
           <input type="file" name="sobre_foto" accept="image/jpeg,image/png,image/webp"></label>
       </div>
@@ -281,27 +322,55 @@ async function lerFormulario(form, antes) {
   for (const i of [...indices].sort((a, b) => a - b)) {
     const g = (c) => form.get(`op[${i}][${c}]`);
     const anterior = antes.opcoes[i] || {};
+    const titulo = limpo(g("titulo"), LIM.titulo);
+
+    /* Item inteiro fora: leva as fotos dele junto, senão viram lixo
+       ocupando espaço que ninguém mais alcança. */
     if (g("remover")) {
-      await apagarSeNossa(anterior.imagem);
+      for (const f of anterior.fotos || []) await apagarSeNossa(f.src);
       continue;
     }
-    const nova = await guardarFoto(form.get(`foto[${i}]`), limpo(g("titulo"), 60) || "imovel");
-    if (nova.erro) erros.push(`Item ${i + 1}: ${nova.erro}`);
-    if (nova.caminho) await apagarSeNossa(anterior.imagem);
+
+    /* As fotos que já estavam, menos as marcadas, na ordem pedida */
+    const fotos = [];
+    const vistos = new Set();
+    for (const chave of form.keys()) {
+      const m = chave.match(new RegExp(`^op\\[${i}\\]\\[fotos\\]\\[(\\d+)\\]\\[src\\]$`));
+      if (m) vistos.add(Number(m[1]));
+    }
+    for (const j of [...vistos].sort((a, b) => a - b)) {
+      const gf = (c) => form.get(`op[${i}][fotos][${j}][${c}]`);
+      const src = limpo(gf("src"), 300);
+      if (!src) continue;
+      if (gf("remover")) { await apagarSeNossa(src); continue; }
+      fotos.push({ src, alt: limpo(gf("alt"), LIM.alt), ordem: Number(gf("ordem")) || (j + 1) });
+    }
+    fotos.sort((a, b) => a.ordem - b.ordem);
+
+    /* As que ela acabou de enviar entram no fim */
+    const vagas = MAX_FOTOS - fotos.length;
+    const enviadas = form.getAll(`novas[${i}]`).filter((f) => f && f.size);
+    if (enviadas.length > vagas) {
+      erros.push(`${titulo || "Item " + (i + 1)}: cabem mais ${vagas} foto(s), ` +
+        `e vieram ${enviadas.length}. Guardei as primeiras.`);
+    }
+    for (const arquivo of enviadas.slice(0, Math.max(0, vagas))) {
+      const nova = await guardarFoto(arquivo, titulo || "imovel");
+      if (nova.erro) { erros.push(`${titulo || "Item " + (i + 1)}: ${nova.erro}`); continue; }
+      fotos.push({ src: nova.caminho, alt: "", ordem: 999 });
+    }
 
     const specs = limpo(g("specs"), LIM.specs).split(",")
       .map((s) => s.trim()).filter(Boolean).slice(0, 4);
-    const ordem = Number(g("ordem")) || (i + 1);
     lista.push({
-      ordem,
-      titulo: limpo(g("titulo"), LIM.titulo),
+      ordem: Number(g("ordem")) || (i + 1),
+      titulo,
       texto: limpo(g("texto"), LIM.texto),
       tag: limpo(g("tag"), LIM.tag),
       bairro: limpo(g("bairro"), LIM.bairro),
       preco: limpo(g("preco"), LIM.preco),
-      alt: limpo(g("alt"), LIM.alt),
       specs,
-      imagem: nova.caminho || limpo(g("imagem"), 300),
+      fotos: fotos.map(({ src, alt }) => ({ src, alt })),
     });
   }
   lista.sort((a, b) => a.ordem - b.ordem);
@@ -309,7 +378,7 @@ async function lerFormulario(form, antes) {
 
   if (form.get("adicionar")) {
     d.opcoes.push({ titulo: "Novo imóvel", texto: "", tag: "", bairro: "", preco: "",
-      alt: "", specs: [], imagem: "" });
+      specs: [], fotos: [] });
   }
   return { dados: d, erros };
 }

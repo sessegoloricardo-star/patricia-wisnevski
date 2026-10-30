@@ -94,3 +94,65 @@
   .pg__dupla,.pg__tripla{ grid-template-columns:1fr }
   .pg__barra{ margin-inline:-14px }
 }
+
+/* =================================================================
+   Galeria de fotos do imóvel
+   ================================================================= */
+.pg__item--largo{ grid-template-columns:1fr }
+
+.pg__galeria{
+  margin-top:18px; padding:16px; border-radius:4px;
+  background:var(--canvas); border:1px solid var(--linha);
+}
+.pg__galeria-topo{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 12px; margin:0 0 14px;
+}
+.pg__galeria-topo strong{
+  font-family:var(--mono); font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink);
+}
+.pg__galeria-topo span{ font-size:13px; color:var(--ink-3) }
+
+.pg__fotos{
+  display:grid; gap:14px; margin:0 0 14px; padding:0; list-style:none;
+  grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+}
+.pg__foto{
+  position:relative; padding:10px; border-radius:4px;
+  background:var(--panel); border:1px solid var(--linha);
+}
+.pg__foto img{
+  width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:3px;
+  background:var(--canvas-2); display:block;
+}
+.pg__capa{
+  position:absolute; top:16px; left:16px; padding:3px 8px; border-radius:2px;
+  background:var(--accent); color:var(--luz);
+  font-family:var(--mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase;
+}
+.pg__foto-ordem,.pg__foto-alt{ display:block; margin-top:9px }
+.pg__foto-ordem span,.pg__foto-alt span{
+  display:block; margin-bottom:4px; font-family:var(--mono); font-size:9px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
+}
+.pg__foto-ordem input,.pg__foto-alt input{
+  width:100%; padding:7px 9px; font-size:13px;
+  border:1px solid var(--linha); border-radius:3px;
+  background:var(--canvas); color:var(--ink);
+}
+.pg__foto-ordem input:focus-visible,.pg__foto-alt input:focus-visible{
+  outline:2px solid var(--accent); outline-offset:1px;
+}
+.pg__foto-fora{
+  display:flex; align-items:center; gap:8px; margin-top:10px;
+  font-size:13px; color:var(--ink-2); cursor:pointer;
+}
+.pg__foto-fora input{ width:15px; height:15px; accent-color:#9B2C1F }
+.pg__foto-fora:hover{ color:#9B2C1F }
+
+.pg__sem-foto{ margin:0 0 14px; font-size:14px; color:var(--ink-3) }
+
+@media (max-width:760px){
+  .pg__fotos{ grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px }
+  .pg__galeria{ padding:12px }
+}

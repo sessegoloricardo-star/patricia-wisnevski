@@ -124,6 +124,13 @@ if ($metodo === 'POST' && (isset($_POST['salvar']) || isset($_POST['adicionar'])
         }
         if (!empty($linha['remover'])) {
             apagar_foto($linha['imagem'] ?? null);
+            /* leva junto as fotos extras da galeria, senão ficam
+               ocupando a pasta sem nada mais apontar para elas */
+            foreach (($dados['opcoes'][$i]['fotos'] ?? []) as $f) {
+                if (is_array($f) && isset($f['src'])) {
+                    apagar_foto($f['src']);
+                }
+            }
             continue;
         }
         $item = [
@@ -161,6 +168,18 @@ if ($metodo === 'POST' && (isset($_POST['salvar']) || isset($_POST['adicionar'])
         if ($item['imagem'] === '') {
             $item['imagem'] = 'assets/imoveis/im-01.jpg';
         }
+
+        /* Este painel edita uma foto por imóvel. O painel do Netlify
+           edita várias, e grava em 'fotos'. Salvar aqui não pode
+           apagar o que lá foi feito: as fotos extras passam intactas,
+           e só a capa acompanha o que foi editado nesta tela. */
+        $antigo = $dados['opcoes'][$i] ?? null;
+        if (is_array($antigo) && !empty($antigo['fotos']) && is_array($antigo['fotos'])) {
+            $fotos = array_values($antigo['fotos']);
+            $fotos[0] = ['src' => $item['imagem'], 'alt' => $item['alt']];
+            $item['fotos'] = $fotos;
+        }
+
         $ordem = (int) ($linha['ordem'] ?? $i);
         $novas[] = ['ordem' => $ordem, 'item' => $item];
     }

@@ -31,6 +31,31 @@ function semAcento(s) {
 /* ---------------------------------------------------------------
    Conteúdo
 ---------------------------------------------------------------- */
+export const MAX_FOTOS = 12;
+
+/* Um imóvel passou a ter várias fotos. O formato antigo guardava uma
+   só, em "imagem" e "alt". Aqui o antigo vira o novo sem ninguém
+   precisar fazer nada, e "imagem" continua existindo, espelhando a
+   primeira foto: o painel em PHP e qualquer dados.js antigo seguem
+   lendo o que esperam. */
+export function normalizarOpcao(bruto) {
+  const o = (bruto && typeof bruto === "object") ? { ...bruto } : {};
+
+  let fotos = Array.isArray(o.fotos) ? o.fotos : null;
+  if (!fotos) fotos = o.imagem ? [{ src: o.imagem, alt: o.alt || "" }] : [];
+
+  o.fotos = fotos
+    .map((f) => (typeof f === "string" ? { src: f, alt: "" } : f))
+    .filter((f) => f && typeof f.src === "string" && f.src.trim())
+    .map((f) => ({ src: String(f.src).trim(), alt: limpo(f.alt, 200) }))
+    .slice(0, MAX_FOTOS);
+
+  o.imagem = o.fotos.length ? o.fotos[0].src : "";
+  o.alt = o.fotos.length ? o.fotos[0].alt : "";
+  o.specs = Array.isArray(o.specs) ? o.specs : [];
+  return o;
+}
+
 export function normalizar(d) {
   const o = (d && typeof d === "object") ? { ...d } : {};
   o.contato = {
@@ -38,7 +63,7 @@ export function normalizar(d) {
     instagram: "", email: "", cidade: "", creci: "", ...(o.contato || {}),
   };
   o.sobre = { foto: "assets/patricia-sobre.jpg", alt: "", citacao: "", texto: "", ...(o.sobre || {}) };
-  o.opcoes = Array.isArray(o.opcoes) ? o.opcoes : [];
+  o.opcoes = (Array.isArray(o.opcoes) ? o.opcoes : []).map(normalizarOpcao);
   o.faq = Array.isArray(o.faq) ? o.faq : [];
   return o;
 }

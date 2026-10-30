@@ -267,6 +267,43 @@
 }
 </script>
 
+<!-- O visor das fotos do imóvel. É o <dialog> nativo: o navegador
+     já prende o foco dentro dele e fecha no Esc, sem código nosso. -->
+<dialog class="visor" id="visor" aria-label="Fotos do imóvel">
+  <div class="visor__caixa">
+    <p class="visor__topo">
+      <span class="visor__titulo" id="visor-titulo"></span>
+      <button class="visor__fechar" type="button" id="visor-fechar" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor"
+                stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </p>
+    <figure class="visor__palco">
+      <img id="visor-img" alt="">
+      <button class="visor__seta visor__seta--antes" type="button" id="visor-antes"
+              aria-label="Foto anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor"
+                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="visor__seta visor__seta--depois" type="button" id="visor-depois"
+              aria-label="Próxima foto">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor"
+                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </figure>
+    <figcaption class="visor__pe">
+      <span class="visor__legenda" id="visor-legenda"></span>
+      <span class="visor__conta" id="visor-conta" role="status"></span>
+    </figcaption>
+  </div>
+</dialog>
+
 <script src="js/dados.js"></script>
 <script src="js/script.js"></script>
 </body>

@@ -13,7 +13,7 @@
    "/painel/" é a função que sobe junto, em netlify/functions/painel.mjs.
    Um endereço de fora (a HostGator, por exemplo) também serve.
    Vazio apaga a portinha do rodapé, para site sem painel nenhum. */
-var PAINEL = "";
+var PAINEL = "/painel/";
 
 import fs from "node:fs";
 import caminho from "node:path";

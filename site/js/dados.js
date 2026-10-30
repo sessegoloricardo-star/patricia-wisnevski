@@ -1,6 +1,6 @@
 /* =============================================================
    DADOS DO SITE, Patricia Wisnevski
-   Gerado pelo painel em 29/10/2026 21:03.
+   Gerado pelo painel em 30/10/2026 12:33.
    Não edite à mão: a próxima gravação do painel sobrescreve.
    ============================================================= */
 
@@ -30,7 +30,13 @@ const DADOS = {
           "alt": "Living de apartamento de alto padrão ao anoitecer, com a cidade acesa pela vidraça",
           "bairro": "",
           "preco": "",
-          "specs": []
+          "specs": [],
+          "fotos": [
+              {
+                  "src": "assets/imoveis/im-01.jpg",
+                  "alt": "Living de apartamento de alto padrão ao anoitecer, com a cidade acesa pela vidraça"
+              }
+          ]
       },
       {
           "tag": "Casas",
@@ -40,7 +46,13 @@ const DADOS = {
           "alt": "Casa contemporânea de alto padrão ao anoitecer, com espelho d água e interior iluminado",
           "bairro": "",
           "preco": "",
-          "specs": []
+          "specs": [],
+          "fotos": [
+              {
+                  "src": "assets/imoveis/im-02.jpg",
+                  "alt": "Casa contemporânea de alto padrão ao anoitecer, com espelho d água e interior iluminado"
+              }
+          ]
       },
       {
           "tag": "Coberturas",
@@ -50,7 +62,13 @@ const DADOS = {
           "alt": "Terraço de cobertura ao anoitecer, com vista para o rio",
           "bairro": "",
           "preco": "",
-          "specs": []
+          "specs": [],
+          "fotos": [
+              {
+                  "src": "assets/imoveis/im-04.jpg",
+                  "alt": "Terraço de cobertura ao anoitecer, com vista para o rio"
+              }
+          ]
       },
       {
           "tag": "Investimento",
@@ -60,7 +78,13 @@ const DADOS = {
           "alt": "Torre residencial vista da rua ao anoitecer",
           "bairro": "Menino Deus",
           "preco": "R$ 4.000.000",
-          "specs": []
+          "specs": [],
+          "fotos": [
+              {
+                  "src": "assets/imoveis/im-03.jpg",
+                  "alt": "Torre residencial vista da rua ao anoitecer"
+              }
+          ]
       }
   ],
 

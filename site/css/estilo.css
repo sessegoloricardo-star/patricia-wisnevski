@@ -1034,3 +1034,109 @@ body.gestor-aberto{ overflow:hidden }
   .busca__campos{ grid-template-columns:1fr; gap:18px }
   .busca{ padding:20px }
 }
+
+/* =================================================================
+   Várias fotos por imóvel: o contador no card e o visor
+   ================================================================= */
+
+/* A capa vira botão quando há mais de uma foto. Zera a aparência de
+   botão: visualmente ela continua sendo a foto do card. */
+.card__foto--abre{
+  appearance:none; border:0; padding:0; margin:0; width:100%;
+  background:none; font:inherit; color:inherit; cursor:pointer; display:block;
+}
+.card__foto--abre:focus-visible{ outline:2px solid var(--accent); outline-offset:3px }
+
+.card__conta{
+  position:absolute; right:12px; bottom:12px; z-index:2;
+  display:inline-flex; align-items:center; gap:6px;
+  padding:5px 10px; border-radius:999px;
+  background:rgba(20,16,12,.76); color:var(--luz);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  font-family:var(--mono); font-size:11px; letter-spacing:.06em;
+  transition:background 220ms var(--saida);
+}
+.card__conta svg{ width:13px; height:13px; fill:currentColor }
+.card__foto--abre:hover .card__conta{ background:var(--accent) }
+
+/* ----------------------------------------------------------------
+   O visor
+---------------------------------------------------------------- */
+.visor{
+  width:min(1100px,94vw); max-width:none; max-height:92vh;
+  padding:0; border:0; border-radius:6px; overflow:hidden;
+  background:var(--noite); color:var(--luz);
+}
+.visor::backdrop{
+  background:rgba(10,8,6,.86);
+  -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+}
+.visor__caixa{ display:flex; flex-direction:column; max-height:92vh }
+
+.visor__topo{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  margin:0; padding:14px 16px 12px;
+  border-bottom:1px solid var(--linha-noite);
+}
+.visor__titulo{
+  font-family:var(--display); font-weight:600; font-size:16px;
+  font-variation-settings:"wdth" 108; letter-spacing:-.018em;
+}
+.visor__fechar{
+  appearance:none; border:0; padding:8px; margin:-8px -6px -8px 0;
+  min-width:44px; min-height:44px;
+  display:grid; place-items:center;
+  background:none; color:var(--luz); cursor:pointer; border-radius:3px;
+  transition:background 200ms var(--saida);
+}
+.visor__fechar svg{ width:20px; height:20px }
+.visor__fechar:hover{ background:rgba(244,242,237,.12) }
+.visor__fechar:focus-visible{ outline:2px solid var(--accent-muted); outline-offset:1px }
+
+.visor__palco{
+  position:relative; margin:0; flex:1; min-height:0;
+  display:grid; place-items:center; background:var(--noite-2);
+}
+.visor__palco img{
+  display:block; max-width:100%; max-height:calc(92vh - 150px);
+  width:auto; height:auto; object-fit:contain;
+}
+
+.visor__seta{
+  position:absolute; top:50%; transform:translateY(-50%);
+  appearance:none; border:0; width:44px; height:44px; border-radius:999px;
+  display:grid; place-items:center; cursor:pointer;
+  background:rgba(20,16,12,.7); color:var(--luz);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  transition:background 200ms var(--saida);
+}
+.visor__seta svg{ width:22px; height:22px }
+.visor__seta:hover{ background:var(--accent) }
+.visor__seta:focus-visible{ outline:2px solid var(--accent-muted); outline-offset:2px }
+.visor__seta--antes{ left:12px }
+.visor__seta--depois{ right:12px }
+.visor__seta[hidden]{ display:none }
+
+.visor__pe{
+  display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between;
+  gap:6px 16px; padding:12px 16px 14px;
+  border-top:1px solid var(--linha-noite);
+}
+.visor__legenda{ font-size:14px; color:rgba(244,242,237,.78); max-width:72ch }
+.visor__conta{
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em;
+  color:rgba(244,242,237,.6); white-space:nowrap;
+}
+
+@media (max-width:640px){
+  .visor{ width:100vw; max-height:100vh; border-radius:0 }
+  .visor__caixa{ max-height:100vh }
+  .visor__palco img{ max-height:calc(100vh - 160px) }
+  .visor__seta{ width:40px; height:40px }
+  .visor__seta--antes{ left:8px }
+  .visor__seta--depois{ right:8px }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .card__conta,.visor__fechar,.visor__seta{ transition:none }
+}

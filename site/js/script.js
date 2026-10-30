@@ -22,6 +22,7 @@
   ----------------------------------------------------------------- */
   var ICONES = {
     whatsapp: "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413",
+    foto: "M4 6h3l1.5-2h7L17 6h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1m8 3a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9m0 1.8a2.7 2.7 0 1 1 0 5.4 2.7 2.7 0 0 1 0-5.4",
     instagram: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24s3.668-.014 4.948-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0m0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324M12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8m6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881",
     email: "M2 4h20v16H2V4m2 2v.4l8 5.01 8-5.01V6H4m16 2.76-8 5.01-8-5.01V18h16V8.76",
     local: "M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7m0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5",
@@ -47,6 +48,16 @@
   function fone(n) {
     var m = n.match(/^55(\d{2})(\d{4,5})(\d{4})$/);
     return m ? "(" + m[1] + ") " + m[2] + "-" + m[3] : n;
+  }
+
+  /* Um imóvel passou a ter várias fotos. Dados antigos, com uma só em
+     "imagem", continuam valendo: viram uma lista de um item. */
+  function fotosDe(o) {
+    var lista = Array.isArray(o.fotos) ? o.fotos : null;
+    if (!lista) lista = o.imagem ? [{ src: o.imagem, alt: o.alt || "" }] : [];
+    return lista
+      .map(function (f) { return typeof f === "string" ? { src: f, alt: "" } : f; })
+      .filter(function (f) { return f && f.src; });
   }
 
   /* ---------------------------------------------------------------
@@ -77,17 +88,28 @@
     /* opções */
     var alvo = document.getElementById("cards");
     if (alvo) {
-      alvo.innerHTML = D.opcoes.map(function (o) {
+      alvo.innerHTML = D.opcoes.map(function (o, i) {
         var specs = (o.specs && o.specs.length)
           ? '<ul class="card__specs">' + o.specs.map(function (s) {
               return "<li>" + esc(s) + "</li>"; }).join("") + "</ul>"
           : "";
+        var fotos = fotosDe(o);
+        var capa = fotos[0] || { src: "", alt: "" };
+        /* Com mais de uma foto, a capa vira botão e abre o visor.
+           Com uma só, continua sendo uma figura: um botão que abre
+           a mesma imagem sozinha não leva a lugar nenhum. */
+        var varias = fotos.length > 1;
         return '<article class="card revelar">' +
-            '<figure class="card__foto">' +
+            (varias
+              ? '<button class="card__foto card__foto--abre" type="button" data-galeria="' + i + '" ' +
+                'aria-label="Ver as ' + fotos.length + " fotos de " + esc(o.titulo) + '">'
+              : '<figure class="card__foto">') +
               (o.tag ? '<span class="card__tag">' + esc(o.tag) + "</span>" : "") +
-              '<img src="' + esc(o.imagem) + '" alt="' + esc(o.alt || o.titulo) +
+              '<img src="' + esc(capa.src) + '" alt="' + esc(capa.alt || o.titulo) +
               '" loading="lazy" width="1600" height="1200">' +
-            "</figure>" +
+              (varias ? '<span class="card__conta" aria-hidden="true">' +
+                svg("foto") + fotos.length + "</span>" : "") +
+            (varias ? "</button>" : "</figure>") +
             '<div class="card__corpo">' +
               (o.bairro ? '<p class="card__bairro">' + esc(o.bairro) + "</p>" : "") +
               "<h3>" + esc(o.titulo) + "</h3>" +
@@ -666,6 +688,85 @@
     armarRevelar(); aplicarModoHero();
   }
   aoRolar();
+
+  /* -----------------------------------------------------------------
+     O visor das fotos do imóvel
+
+     O <dialog> nativo cuida do foco preso e do Esc. O que sobra para
+     nós é trocar a imagem, contar onde estamos e devolver o foco ao
+     card de onde a pessoa veio.
+  ----------------------------------------------------------------- */
+  (function () {
+    var visor = document.getElementById("visor");
+    if (!visor || !visor.showModal) return;
+
+    var img = document.getElementById("visor-img");
+    var titulo = document.getElementById("visor-titulo");
+    var legenda = document.getElementById("visor-legenda");
+    var conta = document.getElementById("visor-conta");
+    var antes = document.getElementById("visor-antes");
+    var depois = document.getElementById("visor-depois");
+    var fechar = document.getElementById("visor-fechar");
+
+    var fotos = [], atual = 0, voltarPara = null;
+
+    function mostrar(n) {
+      if (!fotos.length) return;
+      atual = (n + fotos.length) % fotos.length;
+      var f = fotos[atual];
+      img.src = f.src;
+      img.alt = f.alt || "";
+      legenda.textContent = f.alt || "";
+      conta.textContent = (atual + 1) + " de " + fotos.length;
+      var uma = fotos.length < 2;
+      antes.hidden = uma;
+      depois.hidden = uma;
+    }
+
+    function abrir(lista, nome, origem) {
+      fotos = lista;
+      voltarPara = origem || null;
+      titulo.textContent = nome || "";
+      mostrar(0);
+      visor.showModal();
+    }
+
+    antes.addEventListener("click", function () { mostrar(atual - 1); });
+    depois.addEventListener("click", function () { mostrar(atual + 1); });
+    fechar.addEventListener("click", function () { visor.close(); });
+
+    visor.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); mostrar(atual - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); mostrar(atual + 1); }
+    });
+
+    /* Clique fora da caixa fecha, que é o que todo mundo espera */
+    visor.addEventListener("click", function (e) {
+      if (e.target === visor) visor.close();
+    });
+
+    /* Quem abriu com o teclado precisa voltar para onde estava */
+    visor.addEventListener("close", function () {
+      if (voltarPara && document.contains(voltarPara)) voltarPara.focus();
+      voltarPara = null;
+      img.removeAttribute("src");
+    });
+
+    /* Os cards são redesenhados a cada edição, então o ouvinte fica
+       no contêiner, não em cada botão. */
+    var cards = document.getElementById("cards");
+    if (cards) {
+      cards.addEventListener("click", function (e) {
+        var botao = e.target.closest ? e.target.closest("[data-galeria]") : null;
+        if (!botao) return;
+        var o = D.opcoes[Number(botao.getAttribute("data-galeria"))];
+        if (!o) return;
+        var lista = fotosDe(o);
+        if (lista.length < 2) return;
+        abrir(lista, o.titulo, botao);
+      });
+    }
+  }());
 
   window.SITE = {
     desenhar: function () { desenhar(); armarRevelar(); },
