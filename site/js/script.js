@@ -796,6 +796,10 @@
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (novo) {
         if (!novo || !novo.contato || !Array.isArray(novo.opcoes)) return;
+        /* Resposta sem imóvel nenhum, com a página já mostrando
+           alguns, é sinal de armazém vazio ou de erro do outro lado.
+           Apagar o site por causa disso seria o pior dos mundos. */
+        if (!novo.opcoes.length && D.opcoes && D.opcoes.length) return;
         if (JSON.stringify(novo) === JSON.stringify(D)) return;
         window.SITE.trocarDados(novo);
       })

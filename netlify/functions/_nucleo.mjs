@@ -5,6 +5,11 @@
 import crypto from "node:crypto";
 import { lerJSON, gravarJSON } from "./_armazem.mjs";
 
+/* O conteúdo que está no repositório. Serve de semente: num site
+   recém-publicado o armazém está vazio, e sem isto o painel abriria
+   sem nenhum imóvel e o site se apagaria ao ler o armazém. */
+import semente from "../../site/conteudo/dados.json" with { type: "json" };
+
 export const MAX_BYTES = 4 * 1024 * 1024;   /* o Netlify não aceita envio maior */
 export const MAX_FALHAS = 5;
 export const ESPERA_SEG = 900;              /* 15 minutos */
@@ -69,7 +74,11 @@ export function normalizar(d) {
 }
 
 export async function carregar() {
-  return normalizar(await lerJSON("dados"));
+  const guardado = await lerJSON("dados");
+  /* Nunca gravado ainda: vale o que veio no repositório. Só a
+     ausência conta; um conteúdo que a corretora esvaziou de
+     propósito continua esvaziado. */
+  return normalizar(guardado === null || guardado === undefined ? semente : guardado);
 }
 export async function gravar(d) {
   await gravarJSON("dados", normalizar(d));

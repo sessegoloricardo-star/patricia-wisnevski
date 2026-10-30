@@ -10,6 +10,11 @@
   command = "node publicar.js"
   publish = "publicar"
 
+  # Fixa a versão, senão o Netlify escolhe a dele e um dia muda
+  # sozinho. 22 é LTS e é com ela que as funções foram testadas.
+  [build.environment]
+    NODE_VERSION = "22"
+
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
