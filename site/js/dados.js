@@ -1,0 +1,89 @@
+/* =============================================================
+   DADOS DO SITE, Patricia Wisnevski
+   Gerado pelo painel em 29/10/2026 21:03.
+   Não edite à mão: a próxima gravação do painel sobrescreve.
+   ============================================================= */
+
+const DADOS = {
+  contato: {
+      "whatsapp": "",
+      "mensagemPadrao": "Olá, Patricia! Vim pelo seu site e gostaria de conversar.",
+      "instagram": "https://www.instagram.com/pwisnevski/",
+      "email": "",
+      "cidade": "Porto Alegre, RS",
+      "creci": "CRECI-RS 082111"
+  },
+
+  sobre: {
+      "foto": "assets/patricia-sobre.jpg",
+      "alt": "Patricia Wisnevski sentada em uma poltrona de madeira, em um ambiente de alto padrão com painéis de madeira e plantas",
+      "citacao": "Uma trajetória construída com experiência, estratégia e propósito.",
+      "texto": "Dos primeiros aprendizados, ainda aos 13 anos, até a experiência de empreender e liderar a operação brasileira de uma holding internacional, foram mais de 30 anos de uma trajetória marcada por desafios, negociações e conexões em diferentes mercados e culturas.\n\nAo longo desse caminho, aprendi que grandes negócios vão muito além de contratos e resultados. Eles nascem da confiança, da visão estratégica e, principalmente, da capacidade de construir relacionamentos sólidos e duradouros.\n\nFoi essa experiência que trouxe comigo para o mercado imobiliário.\n\nHoje, em um novo segmento, sigo guiada pelos mesmos princípios que construíram minha trajetória: conectar pessoas, identificar oportunidades e transformar relacionamentos em negócios de valor."
+  },
+
+  opcoes: [
+      {
+          "tag": "Lançamentos",
+          "titulo": "Lançamentos",
+          "texto": "Planta, condição e tabela antes de chegar ao mercado.",
+          "imagem": "assets/imoveis/im-01.jpg",
+          "alt": "Living de apartamento de alto padrão ao anoitecer, com a cidade acesa pela vidraça",
+          "bairro": "",
+          "preco": "",
+          "specs": []
+      },
+      {
+          "tag": "Casas",
+          "titulo": "Casas em condomínio",
+          "texto": "Terreno, orientação solar e obra pesam diferente numa casa.",
+          "imagem": "assets/imoveis/im-02.jpg",
+          "alt": "Casa contemporânea de alto padrão ao anoitecer, com espelho d água e interior iluminado",
+          "bairro": "",
+          "preco": "",
+          "specs": []
+      },
+      {
+          "tag": "Coberturas",
+          "titulo": "Coberturas",
+          "texto": "Metragem e terraço que não aparecem nos portais.",
+          "imagem": "assets/imoveis/im-04.jpg",
+          "alt": "Terraço de cobertura ao anoitecer, com vista para o rio",
+          "bairro": "",
+          "preco": "",
+          "specs": []
+      },
+      {
+          "tag": "Investimento",
+          "titulo": "Investimento",
+          "texto": "Fluxo de pagamento, liquidez e horizonte de saída.",
+          "imagem": "assets/imoveis/im-03.jpg",
+          "alt": "Torre residencial vista da rua ao anoitecer",
+          "bairro": "Menino Deus",
+          "preco": "R$ 4.000.000",
+          "specs": []
+      }
+  ],
+
+  faq: [
+      {
+          "p": "E se eu me arrepender depois de assinar?",
+          "r": "Compra em estande tem sete dias de arrependimento por lei. Passado o prazo, desistir vira distrato e a construtora retém parte do que você já pagou. Por isso eu demoro na conversa e sou rápida na visita. Ninguém assina comigo no primeiro encontro."
+      },
+      {
+          "p": "E se o banco negar meu financiamento?",
+          "r": "A gente checa seu crédito antes da proposta, não depois. Promessa de aprovação que o corretor não pode dar é como muita gente perde sinal e tempo."
+      },
+      {
+          "p": "Você vai ficar me ligando todo dia?",
+          "r": "Não. A gente combina a frequência e eu cumpro. Se você sumir, eu entendo que não era o momento."
+      },
+      {
+          "p": "Com quais construtoras você trabalha?",
+          "r": "Melnick e Housin, e acompanho os demais lançamentos da cidade. Isso me deixa comparar incorporadoras diferentes em vez de empurrar um estoque só."
+      },
+      {
+          "p": "Tem custo para mim?",
+          "r": "Em lançamento, a corretagem é paga pela construtora. Nas outras operações, as condições são combinadas antes de qualquer visita."
+      }
+  ]
+};

@@ -1,0 +1,74 @@
+# =============================================================
+# Netlify, site da Patricia Wisnevski
+#
+# O Netlify roda "node publicar.js" e sobe a pasta publicar/.
+# O painel do gestor sobe junto, como função em netlify/functions/.
+# O conteúdo dele mora em Netlify Blobs.
+# =============================================================
+
+[build]
+  command = "node publicar.js"
+  publish = "publicar"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# -------------------------------------------------------------
+# Cabeçalhos de segurança, em tudo
+# -------------------------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+# -------------------------------------------------------------
+# Cache
+#
+# Imagens e vídeo não mudam de nome, mas também quase não mudam:
+# um ano, e quando trocarem é só republicar que o Netlify invalida.
+# O HTML, o CSS e o JS mudam a cada publicação e têm nome fixo,
+# então pedem revalidação para ninguém ficar com a versão velha.
+# -------------------------------------------------------------
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/favicon.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# -------------------------------------------------------------
+# O painel e as fotos enviadas são funções, e se roteiam sozinhos
+# pelo "config.path" de cada uma. Nenhum redirecionamento aqui,
+# senão ele passaria na frente delas.
+#
+# O painel não entra em cache, e as fotos entram para sempre:
+# cada envio gera um nome novo, então o arquivo nunca muda.
+# -------------------------------------------------------------
+[[headers]]
+  for = "/painel/*"
+  [headers.values]
+    Cache-Control = "no-store"
+    X-Robots-Tag = "noindex, nofollow"

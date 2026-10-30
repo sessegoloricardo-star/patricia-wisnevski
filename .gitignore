@@ -1,0 +1,9 @@
+publicar/
+revisao/
+site/conteudo/config.php
+site/conteudo/tentativas.json
+node_modules/
+.armazem-local/
+.claude/
+Thumbs.db
+.DS_Store

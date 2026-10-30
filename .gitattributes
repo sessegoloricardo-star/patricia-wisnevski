@@ -1,0 +1,12 @@
+# O Netlify constrói em Linux. Texto vai com LF no repositório,
+# não importa em que sistema alguém editar.
+* text=auto eol=lf
+
+# Binários não passam por conversão nenhuma.
+*.jpg  binary
+*.jpeg binary
+*.png  binary
+*.webp binary
+*.ico  binary
+*.mp4  binary
+*.woff2 binary

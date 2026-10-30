@@ -1,0 +1,16 @@
+{
+  "name": "site-patricia-wisnevski",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Site da corretora Patricia Wisnevski, com area do gestor em Netlify Functions.",
+  "scripts": {
+    "build": "node publicar.js"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

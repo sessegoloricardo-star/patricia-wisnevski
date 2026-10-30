@@ -1,0 +1,96 @@
+/* =================================================================
+   Painel. Herda os tokens e os campos de ../css/estilo.css.
+   ================================================================= */
+
+.pg{ background:var(--canvas); color:var(--ink-2); min-height:100vh }
+.pg .ambiente{ display:none }
+
+.pg__topo{
+  position:sticky; top:0; z-index:10;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding:16px 28px; background:var(--canvas);
+  border-bottom:1px solid var(--linha);
+}
+.pg__topo strong{
+  display:block; font-family:var(--display); font-weight:600;
+  font-variation-settings:"wdth" 110; font-size:18px; color:var(--ink);
+  letter-spacing:-.018em;
+}
+.pg__topo span{
+  display:block; margin-top:3px; font-family:var(--mono);
+  font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+}
+.pg__nav{ display:flex; gap:18px }
+.pg__nav a{
+  font-size:14.5px; color:var(--ink-2); text-decoration:none;
+  transition:color 220ms var(--saida);
+}
+.pg__nav a:hover{ color:var(--accent) }
+
+.pg__corpo{ max-width:1000px; margin:0 auto; padding:28px 20px 80px }
+
+.pg__caixa{
+  background:var(--panel); border:1px solid var(--linha); border-radius:5px;
+  padding:26px; margin-bottom:22px; box-shadow:var(--sombra);
+}
+.pg__caixa--estreita{ max-width:420px; margin:48px auto }
+.pg__caixa h1{ font-size:24px; letter-spacing:-.025em; margin-bottom:10px }
+.pg__caixa h2{ font-size:19px; letter-spacing:-.022em; margin-bottom:8px }
+.pg__lede{ font-size:14.5px; color:var(--ink-2); margin:0 0 22px; max-width:66ch }
+
+.pg__aviso{
+  margin:0 0 18px; padding:13px 16px; border-radius:3px; font-size:14.5px;
+  border-left:3px solid;
+}
+.pg__aviso--erro{ background:rgba(155,44,31,.07); border-color:#9B2C1F; color:#7C2318 }
+.pg__aviso--ok{ background:rgba(126,96,57,.08); border-color:var(--accent); color:var(--accent) }
+
+.pg__item{
+  display:grid; grid-template-columns:190px 1fr; gap:24px;
+  padding:24px 0; border-top:1px solid var(--linha);
+}
+.pg__item:first-of-type{ border-top:0; padding-top:6px }
+.pg__item-foto img{
+  width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:3px;
+  border:1px solid var(--linha); background:var(--canvas-2);
+}
+.pg__item-campos{ min-width:0 }
+
+.pg__arquivo{
+  display:block; margin-top:10px; padding:9px 12px; cursor:pointer;
+  border:1px dashed var(--linha-forte); border-radius:3px; text-align:center;
+  transition:border-color 220ms var(--saida), color 220ms var(--saida);
+}
+.pg__arquivo:hover{ border-color:var(--accent); color:var(--accent) }
+.pg__arquivo span{
+  display:block; font-family:var(--mono); font-size:10px;
+  letter-spacing:.12em; text-transform:uppercase; margin-bottom:6px;
+}
+.pg__arquivo input{ width:100%; font-size:12px }
+
+.pg__dupla{ display:grid; grid-template-columns:1fr 110px; gap:14px }
+.pg__tripla{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px }
+
+.pg__remover{
+  display:inline-flex; align-items:center; gap:9px; margin-top:4px;
+  font-size:14px; color:var(--ink-2); cursor:pointer;
+}
+.pg__remover input{ width:16px; height:16px; accent-color:#9B2C1F }
+.pg__remover:hover{ color:#9B2C1F }
+
+.pg__barra{
+  position:sticky; bottom:0; display:flex; flex-wrap:wrap; align-items:center; gap:14px;
+  padding:16px 20px; margin:0 -20px -80px; background:rgba(244,242,237,.94);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border-top:1px solid var(--linha);
+}
+.pg__nota{ font-family:var(--mono); font-size:11px; color:var(--ink-3) }
+
+@media (max-width:760px){
+  .pg__corpo{ padding:20px 14px 80px }
+  .pg__caixa{ padding:20px }
+  .pg__item{ grid-template-columns:1fr }
+  .pg__item-foto{ max-width:240px }
+  .pg__dupla,.pg__tripla{ grid-template-columns:1fr }
+  .pg__barra{ margin-inline:-14px }
+}
