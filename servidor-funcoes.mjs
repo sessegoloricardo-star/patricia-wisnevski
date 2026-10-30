@@ -36,7 +36,10 @@ const TIPOS = {
 const rotas = [];
 const pasta = path.join(__dirname, "netlify", "functions");
 for (const arquivo of fs.readdirSync(pasta)) {
-  if (!arquivo.endsWith(".mjs") || arquivo.startsWith("_")) continue;
+  /* Tudo que estiver aqui é função. O que é peça interna mora em
+     netlify/lib/, fora desta pasta: o Netlify publica como função
+     cada arquivo daqui, inclusive os que começam com sublinhado. */
+  if (!arquivo.endsWith(".mjs")) continue;
   const mod = await import(new URL("netlify/functions/" + arquivo, import.meta.url));
   const caminhos = [].concat((mod.config && mod.config.path) || []);
   for (const c of caminhos) {

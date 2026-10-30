@@ -9,8 +9,8 @@ import {
   h, limpo, carregar, gravar, instalado, gravarSenha, entrar,
   lerSessao, cookieSessao, token, tokenOk, bloqueadoPor,
   MAX_BYTES, MAX_FOTOS, tipoDaImagem, nomeDeFoto,
-} from "./_nucleo.mjs";
-import { gravarBin, apagar } from "./_armazem.mjs";
+} from "../lib/nucleo.mjs";
+import { gravarBin, apagar } from "../lib/armazem.mjs";
 
 export const config = { path: ["/painel", "/painel/", "/painel/sair"] };
 

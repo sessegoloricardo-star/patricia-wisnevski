@@ -6,7 +6,7 @@
    hífen e sublinhado. Nada que venha do endereço vira caminho.
    ============================================================= */
 
-import { lerBin } from "./_armazem.mjs";
+import { lerBin } from "../lib/armazem.mjs";
 
 export const config = { path: "/api/foto/:nome" };
 

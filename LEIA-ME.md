@@ -23,12 +23,14 @@ patricia-wisnevski/
 │   ├── painel/            <- a área do gestor, em PHP
 │   ├── conteudo/          <- dados e senha. Protegido por .htaccess
 │   └── assets/
-├── netlify/functions/     <- O PAINEL NO NETLIFY, em JavaScript.
-│   ├── painel.mjs         <- a tela do gestor
-│   ├── dados.mjs          <- entrega o conteúdo ao site
-│   ├── foto.mjs           <- serve as fotos enviadas
-│   ├── _nucleo.mjs        <- senha, sessão, CSRF, validação
-│   └── _armazem.mjs       <- onde o conteúdo fica guardado
+├── netlify/
+│   ├── functions/         <- O PAINEL NO NETLIFY. Cada arquivo daqui
+│   │   ├── painel.mjs        vira uma função publicada, então só
+│   │   ├── dados.mjs         entra aqui o que é endereço de verdade.
+│   │   └── foto.mjs
+│   └── lib/               <- peças internas, nunca publicadas
+│       ├── nucleo.mjs     <- senha, sessão, CSRF, validação
+│       └── armazem.mjs    <- onde o conteúdo fica guardado
 ├── publicar/              <- GERADA. O pacote estático do Netlify.
 ├── .armazem-local/        <- GERADA. O conteúdo ao testar na sua máquina.
 ├── publicar.js            <- monta publicar/ a partir de site/

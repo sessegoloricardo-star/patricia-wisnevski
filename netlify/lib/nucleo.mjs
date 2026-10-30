@@ -3,7 +3,7 @@
    ============================================================= */
 
 import crypto from "node:crypto";
-import { lerJSON, gravarJSON } from "./_armazem.mjs";
+import { lerJSON, gravarJSON } from "./armazem.mjs";
 
 /* O conteúdo que está no repositório. Serve de semente: num site
    recém-publicado o armazém está vazio, e sem isto o painel abriria

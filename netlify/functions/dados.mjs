@@ -8,7 +8,7 @@
    com o conteúdo da última publicação.
    ============================================================= */
 
-import { carregar, gerarJS } from "./_nucleo.mjs";
+import { carregar, gerarJS } from "../lib/nucleo.mjs";
 
 export const config = { path: ["/api/dados", "/api/dados.js"] };
 
