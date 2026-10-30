@@ -283,10 +283,14 @@ Ele apaga e refaz `publicar/` a partir de `site/`, deixando de fora `painel/`,
 `conteudo/` e os `.htaccess`. No fim ele **confere e recusa a publicação** se
 algum `.php` ou o arquivo de senha tiver escapado para dentro da pasta.
 
-**Tem que ser por Git.** Arrastar a pasta no navegador publica arquivos
-estáticos e nada mais: o Netlify não instala a dependência das funções nem as
-empacota, então o site subiria e o painel daria 404. Com o painel junto, o
-caminho é um só:
+**Sem painel, arraste e pronto.** Com `PAINEL = ""` em `publicar.js`, o pacote é
+só arquivo estático: abra app.netlify.com, vá em **Sites**, e arraste a pasta
+`publicar/` (ou o `site-patricia-netlify.zip`) para a área de envio. A cada
+mudança, rode `node publicar.js` e arraste de novo.
+
+**Com o painel, tem que ser por Git.** Arrastar publica arquivos estáticos e
+nada mais: o Netlify não instala a dependência das funções nem as empacota,
+então o site subiria e o painel daria 404. Nesse caso:
 
 1. Suba a pasta do projeto para um repositório.
 2. Em app.netlify.com, **Add new site, Import an existing project**, e aponte
@@ -358,6 +362,8 @@ Chrome de verdade, headless, com toque emulado.
 | CSRF inválido | recusado com 400 |
 | Site lendo o painel | card, bairro, preço e botão de WhatsApp mudam sem republicar |
 | O site sem o painel | vídeo, filtro, cards e foto funcionam igual; só a portinha some |
+| Pacote sem painel | nenhum pedido a `/api` ou `/painel`: nada de backend |
+| O zip | descompacta com `index.html` na raiz, 15 arquivos idênticos à pasta |
 | Celular com toque de verdade | **não baixa o vídeo** |
 | Movimento reduzido | não baixa o vídeo, re-arma nas duas direções |
 | Rolagem lateral indevida | zero |

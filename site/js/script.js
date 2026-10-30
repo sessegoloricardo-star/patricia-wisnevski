@@ -683,6 +683,9 @@
      resposta estranha ou sem rede, a página fica como está.
   ----------------------------------------------------------------- */
   (function () {
+    /* publicar.js liga isto só quando o painel sobe junto. Sem painel,
+       nem vale o pedido: ele voltaria 404 em toda visita. */
+    if (!window.PAINEL_NO_AR) return;
     if (!window.fetch || location.protocol === "file:") return;
 
     var controle = new AbortController();

@@ -13,7 +13,7 @@
    "/painel/" é a função que sobe junto, em netlify/functions/painel.mjs.
    Um endereço de fora (a HostGator, por exemplo) também serve.
    Vazio apaga a portinha do rodapé, para site sem painel nenhum. */
-var PAINEL = "/painel/";
+var PAINEL = "";
 
 import fs from "node:fs";
 import caminho from "node:path";
@@ -51,9 +51,10 @@ limpar(DESTINO);
 copiar(ORIGEM, DESTINO, ORIGEM);
 
 /* A pasta painel/ fica de fora, mas a folha de estilo dela é servida
-   ao navegador quando a corretora abre o painel. Essa vai. */
+   ao navegador quando a corretora abre o painel. Então ela vai junto,
+   e só quando o painel for junto: sem painel é peso morto. */
 var folha = caminho.join(ORIGEM, "painel", "painel.css");
-if (fs.existsSync(folha)) {
+if (PAINEL === "/painel/" && fs.existsSync(folha)) {
   fs.copyFileSync(folha, caminho.join(DESTINO, "css", "painel.css"));
   copiados.push("css/painel.css");
   bytes += fs.statSync(folha).size;
@@ -78,6 +79,16 @@ if (!achou) {
   html = html.replace(porta, "");
   console.log("Porta do gestor removida: não há painel neste endereço.");
 }
+/* A chave da camada ao vivo. Só acende quando o painel sobe junto,
+   no mesmo endereço, servindo /api/dados. Sem ele, o pedido voltaria
+   404 em toda visita, e o site já tem o conteúdo que precisa. */
+var aoVivo = PAINEL === "/painel/";
+html = html.replace("</head>",
+  "<script>window.PAINEL_NO_AR=" + (aoVivo ? "true" : "false") + "</script>\n</head>");
+console.log(aoVivo
+  ? "Camada ao vivo ligada: o site lê o painel."
+  : "Camada ao vivo desligada: o site usa só o js/dados.js do pacote.");
+
 fs.writeFileSync(alvo, html, "utf8");
 
 /* Relatório */
